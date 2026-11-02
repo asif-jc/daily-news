@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "run_id": "23e57272-d898-4d69-a322-3c49069accab",
-  "generated_at": "2026-11-01T14:00:14.366541+00:00",
-  "stories": 180,
+  "run_id": "d21339b2-6808-4bd1-9e3c-5b73477626d9",
+  "generated_at": "2026-11-02T14:00:16.066358+00:00",
+  "stories": 189,
   "files": {
-    "index.html": "ecc303c2fbed776a4d9161cb5bdb47af4486f3d56ccb264d6bda5fbde509a21a",
+    "index.html": "4ce6b26450a723b217b591417ac0da2cc7052adc169ece297eeb0b6f9108ae9c",
     "assets/editorial-curiosity.png": "5a1ebb88c27be27c3c66466ffa63c112b137c6d31db5d45720c175df571052af",
     "assets/editorial-world.png": "0580e1a1cc809ffa982fa4d1958b61579c4e6a185e0aaf67b78e3a130ce98cd9",
     "assets/editorial-technology.png": "d1e3b9c367fa81a65be6f1854321774719cc90dfce4fe7d84b7de7d870f86880",
-    "archive/a71861ea-5f67-4514-afc0-321bfd55e95a.html": "9ee61a190b4dad766d6e7607eb51c23a3a43b636c78177503dccdabda100e238",
-    "archive/c527f009-4027-4f60-8c9f-d6cdff974e26.html": "f4755fa5cf6db467fe76e8606a3c428a18197603925fd0a44e2b1342f2a41e58",
-    "archive/fef6cc5d-38f2-4bbb-b887-9f6a33ace953.html": "5f89ca3d56a47554c4f863bd03ddc9f6d9d6f5856d396da42b9b1b9de2cd876e",
-    "archive/0359c48f-1832-4212-8b2f-ce3f354a58a0.html": "7f90343ff0debcf4b6ca7cca177c520708ef28bd16a45a008ef4f8f8ba54cd69",
-    "archive/df7ecc03-735a-406b-abec-13be48d20e17.html": "df78569ffee290f8911d3b7c10d1c3eb58fb08da70d698093d9a904e221acdee",
-    "archive/2fc01fc2-1a26-4fcc-8d88-dd849aced8b8.html": "27912b5e08bcd2eedc1f2d4d39f85c6eb705a66f3762d00cebfe0f962ae71707"
+    "archive/23e57272-d898-4d69-a322-3c49069accab.html": "a95e6d2116985b65e20ea7ba71c7beac76640fbfe0a285070e7d4af5ea26e5fc",
+    "archive/a71861ea-5f67-4514-afc0-321bfd55e95a.html": "7d46eb882af315344018cedf4691314da41205c22be47b4af57dec7e0c5f87bb",
+    "archive/c527f009-4027-4f60-8c9f-d6cdff974e26.html": "48a18d2ed7b9431d94905239e89999da3957cb1c8ce2987d4d4bc30907dd395a",
+    "archive/fef6cc5d-38f2-4bbb-b887-9f6a33ace953.html": "3232ce10aa93b1fe3f2ab77184aabc56b234a1481126d287c3ff394855c98daa",
+    "archive/0359c48f-1832-4212-8b2f-ce3f354a58a0.html": "cf90a32cd5963f258f7ca774a830f58cee4b8045386beeb5b70fbb9cd545940c",
+    "archive/df7ecc03-735a-406b-abec-13be48d20e17.html": "07dd6e8000376ac084410191e83b1998ffe156f7e9dbc937d4ab8f8ed9e50110"
   }
 }
