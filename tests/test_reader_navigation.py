@@ -129,6 +129,7 @@ class StoryNavigationTests(unittest.TestCase):
         current['generated_at'] = 'unknown'
         page = self.page(current)
         self.assertIn('Date unavailable', page.get_text())
+        self.assertNotIn('As of', page.select_one('.edition-refresh').get_text())
         self.assertEqual(page.select_one('.calendar-latest')['href'], 'index.html')
 
 

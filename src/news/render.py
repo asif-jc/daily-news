@@ -290,6 +290,7 @@ def render_edition(edition, archives=(), *, archive=False):
     local_date = generated.astimezone(ZoneInfo("Pacific/Auckland")) if generated else None
     refresh_date = local_date.strftime("%-d %B %Y") if local_date else "Date unavailable"
     refresh_time = local_date.strftime("%-I:%M %p").lower() + local_date.strftime(" %Z") if local_date else ""
+    refresh_time_html = f'<span class="refresh-time">As of {escape(refresh_time)}</span>' if refresh_time else ''
     briefing_label = local_date.strftime("%A") + "’s briefing" if local_date else "Your daily briefing"
     refresh_datetime = f' datetime="{escape(generated.isoformat())}"' if generated else ""
     body = f'''
@@ -297,7 +298,7 @@ def render_edition(edition, archives=(), *, archive=False):
 <header class="mobile-header">{LOGO}<span class="mobile-brand"><strong>Daily News</strong><time{refresh_datetime}>{escape(refresh_date)}</time></span><button id="browse-stories" type="button" aria-controls="story-browser" aria-expanded="false">Browse stories</button></header>
 <aside id="story-browser" aria-label="Story browser">
   <div class="browser-intro"><a class="reader-brand" href="index.html" aria-label="Daily News, latest edition">{LOGO}<strong>Daily News</strong></a><button id="close-browser" type="button" aria-label="Close story browser">×</button>
-  <div class="edition-refresh"><span class="eyebrow">{briefing_label}</span><time class="edition-date"{refresh_datetime}><span class="refresh-date">{escape(refresh_date)}</span><span class="refresh-time">As of {escape(refresh_time)}</span></time><span class="edition-status">{status}</span>{calendar}</div></div>
+  <div class="edition-refresh"><span class="eyebrow">{briefing_label}</span><time class="edition-date"{refresh_datetime}><span class="refresh-date">{escape(refresh_date)}</span>{refresh_time_html}</time><span class="edition-status">{status}</span>{calendar}</div></div>
   <div class="reader-controls" hidden><label class="search-label" for="story-search">Search stories</label><div class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><input id="story-search" type="search" placeholder="Find something to read…" autocomplete="off"></div>
     <div class="filter-row"><label>Topic<select id="topic-filter"><option value="">All topics</option>{topic_options}</select></label><label>Geography<select id="geography-filter"><option value="">All places</option>{geography_options}</select></label></div>
     <div class="filter-checks"><label><input id="unread-filter" type="checkbox"> Unread only</label><label><input id="history-filter" type="checkbox"> Include past 7 days</label></div>
