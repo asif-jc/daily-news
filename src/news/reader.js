@@ -11,6 +11,22 @@
   const search = controls["story-search"], topic = controls["topic-filter"], geography = controls["geography-filter"];
   const unread = controls["unread-filter"], history = controls["history-filter"];
   const status = document.getElementById("storage-status");
+  const editionDays = [...document.querySelectorAll("a.calendar-day")];
+  const editionPanels = [...document.querySelectorAll(".edition-panel")];
+  function selectEditionDay(day) {
+    editionDays.forEach(link => {
+      if (link === day) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    });
+    editionPanels.forEach(panel => { panel.hidden = "#" + panel.id !== day.hash; });
+  }
+  const selectedDay = editionDays.find(day => day.hash === location.hash) || editionDays.find(day => day.hasAttribute("aria-current"));
+  if (selectedDay) selectEditionDay(selectedDay);
+  editionDays.forEach(day => day.addEventListener("click", event => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    selectEditionDay(day);
+  }));
   const stories = [...document.querySelectorAll(".reader-story")].map(article => ({
     article,
     id: article.id,

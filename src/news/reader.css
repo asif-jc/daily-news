@@ -23,12 +23,42 @@ button:hover, .story-original:hover { background: #e4e4e0; }
 .browser-intro { position: relative; flex-shrink: 0; }
 .reader-brand { display: flex; gap: 12px; align-items: center; text-decoration: none; font-size: 26px; line-height: 1.1; letter-spacing: -.05em; }
 .reader-brand .reader-mark { width: 44px; height: 44px; }
-.edition-refresh { margin-top: 18px; padding: 11px 13px 12px; border: 1px solid #c2c4b7; border-radius: 9px; background: var(--sage); }
-.edition-refresh > .eyebrow { display: block; font-size: 9px; letter-spacing: .09em; margin-bottom: 4px; }
-.edition-date { display: flex; flex-wrap: wrap; align-items: baseline; gap: 3px 10px; font-variant-numeric: tabular-nums; }
-.refresh-date { font-size: 21px; font-weight: 700; letter-spacing: -.035em; line-height: 1.2; }
-.refresh-time { font-size: 12px; white-space: nowrap; }
-.edition-status { display: block; font-size: 10px; color: #5d5d58; margin: 6px 1px 0; }
+.edition-refresh { margin-top: 22px; border-top: 2px solid var(--ink); padding-top: 13px; }
+.edition-refresh > .eyebrow { display: block; font-size: 10px; letter-spacing: .1em; margin-bottom: 5px; }
+.edition-date { display: flex; flex-direction: column; gap: 5px; font-variant-numeric: tabular-nums; }
+.refresh-date { font-size: 25px; font-weight: 700; letter-spacing: -.045em; line-height: 1.2; }
+.refresh-time { font-size: 12px; }
+.edition-status { display: block; font-size: 10px; color: #5d5d58; margin-top: 3px; }
+.edition-calendar { margin-top: 13px; border-top: 1px solid #b7b7b0; border-bottom: 1px solid #b7b7b0; font-size: 12px; }
+.edition-calendar > summary { display: flex; align-items: center; gap: 7px; cursor: pointer; padding: 10px 0; list-style: none; font-weight: 600; }
+.edition-calendar > summary::-webkit-details-marker { display: none; }
+.edition-calendar > summary::after { content: "+"; margin-left: 2px; font-size: 17px; line-height: 1; font-weight: 400; }
+.edition-calendar[open] > summary::after { content: "−"; }
+.edition-calendar summary svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.calendar-summary-note { margin-left: auto; font-size: 10px; color: #63635e; font-weight: 400; }
+.calendar-heading { display: flex; align-items: baseline; justify-content: space-between; padding: 6px 0 12px; }
+.calendar-heading strong { font-size: 14px; letter-spacing: -.025em; }
+.calendar-heading > span { color: #63635e; font-size: 11px; }
+.calendar-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; }
+.calendar-day { min-width: 0; display: flex; flex-direction: column; align-items: center; padding: 6px 0 2px; border: 1px solid transparent; border-radius: 5px; text-decoration: none; line-height: 1.4; }
+.calendar-day > span:first-child { font-size: 9px; text-transform: uppercase; }
+.calendar-day strong { font-size: 19px; font-weight: 600; letter-spacing: -.04em; }
+.calendar-marks { font-size: 17px; line-height: 10px; height: 12px; letter-spacing: 1px; }
+a.calendar-day:hover { border-color: var(--ink); background: white; }
+.calendar-day[aria-current] { color: white; background: var(--ink); }
+a.calendar-day[aria-current]:hover { background: #4c4c49; }
+.calendar-day.is-empty { color: #74746d; cursor: default; background: transparent; }
+.edition-panel { padding-top: 11px; }
+.edition-panel > p { font-size: 11px; margin: 0 0 7px; }
+.edition-panel nav { display: flex; gap: 6px; flex-wrap: wrap; }
+.edition-panel nav a { background: white; border: 1px solid var(--ink); border-radius: 5px; padding: 8px 10px; text-decoration: none; font-size: 11px; }
+.edition-panel nav a:hover { background: var(--lilac); }
+.edition-panel nav a[aria-current] { background: var(--lilac); box-shadow: inset 0 0 0 1px var(--ink); }
+.calendar-preview { display: block; font-size: 10px; }
+.calendar-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; }
+.calendar-footer a, .calendar-latest { display: inline-flex; gap: 7px; align-items: center; padding: 13px 0 10px; text-decoration: none; font-size: 11px; }
+.calendar-footer a:hover, .calendar-latest:hover { text-decoration: underline; }
+.calendar-footer .calendar-latest { margin-left: auto; }
 .reader-controls { flex-shrink: 0; margin: 18px 0; }
 .search-label, .filter-row label { font-size: 12px; font-weight: 600; }
 .search-label { display: block; margin-bottom: 6px; }
@@ -58,7 +88,6 @@ button:hover, .story-original:hover { background: #e4e4e0; }
 #browser-empty { font-size: 14px; padding: 16px; }
 .browser-options { flex-shrink: 0; font-size: 11px; padding-top: 14px; }
 .browser-options summary { cursor: pointer; }
-.edition-history { display: flex; flex-direction: column; margin: 10px 0; gap: 7px; }
 #storage-status { margin: 9px 0; color: #5c5c57; font-size: 11px; }
 #reset-read { padding: 5px 8px; font-size: 11px; }
 .publisher-credit { font-size: 10px; color: #5c5c57; }

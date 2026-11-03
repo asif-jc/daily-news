@@ -70,6 +70,14 @@ class ReaderBrowserTests(unittest.TestCase):
             try:
                 scenarios = {
                     "desktop": (1440, 1000, [
+                        click('.edition-calendar summary'),
+                        click('a.calendar-day[href="#edition-day-2026-10-18"]'),
+                        wait('#edition-day-2026-10-18:not([hidden])'),
+                        click('#edition-day-2026-10-18 a'),
+                        wait(f'.story-link[href^="archive/{old["run_id"]}.html#"]'),
+                        click('.edition-calendar summary'),
+                        wait('.edition-panel a[aria-current="page"]'),
+                        click('.calendar-latest'),
                         wait(f'#{first}:not([hidden])'),
                         click(f'.story-link[data-story-id="{second}"]'),
                         value("fill", "#story-search", "Second report"),
@@ -109,6 +117,12 @@ class ReaderBrowserTests(unittest.TestCase):
                     ]),
                     "mobile": (390, 844, [
                         click("#browse-stories"),
+                        click('.edition-calendar summary'),
+                        click('a.calendar-day[href="#edition-day-2026-10-18"]'),
+                        wait('#edition-day-2026-10-18:not([hidden])'),
+                        click('a.calendar-day[href="#edition-day-2026-10-19"]'),
+                        wait('#edition-day-2026-10-19:not([hidden])'),
+                        click('.edition-calendar summary'),
                         wait('#story-browser[role="dialog"][aria-modal="true"]'),
                         wait('#reader-content[inert]'),
                         value("select_option", "#topic-filter", "Politics"),

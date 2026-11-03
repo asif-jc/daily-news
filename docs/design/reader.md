@@ -43,6 +43,8 @@ The review preview uses the retained 26 October source-audited edition, not a ne
 
 ## Sidebar refinement
 
-The product name is **Daily News**. The sidebar highlights the edition's generation date and Auckland time as Last refreshed; rebuilding or deploying HTML does not change that timestamp. The mobile header repeats the edition date so it remains visible with the drawer closed.
+The product name is **Daily News**. A ruled editorial dateline identifies the weekday's briefing and edition date. The secondary **As of** time uses Pacific/Auckland and represents the retained snapshot, not deployment completion; rebuilding HTML does not change it. The mobile header repeats the edition date while the drawer is closed.
 
-Search and native topic/place selectors share dark outlines, white surfaces and larger touch targets. A left border reinforces the selected story. At 360px and below, selectors stack to keep longer place names readable. The sidebar retains its overall scroll path for short screens and expanded reading options.
+**Browse editions** opens a seven-day publication calendar ending on the viewed edition's Auckland date. Available days reveal their individual publication times, with the selected edition highlighted. Missing days are disabled. An **Earlier editions** link bridges older retained windows, including gaps longer than a week; **Latest edition** returns to the current reader. Real links remain usable without scripts. **Reading preferences** is a separate disclosure.
+
+Search and native topic/place selectors share dark outlines, white surfaces and larger touch targets. A left border reinforces the selected story. At 360px and below, selectors stack to keep longer place names readable. The sidebar retains its overall scroll path for short screens and expanded calendar and reading preferences.

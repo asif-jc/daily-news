@@ -202,6 +202,58 @@ def _story_link(story, date, page_path, historic=False):
     )
 
 
+def _edition_calendar(current, history, archive):
+    """Use Auckland dates and real edition links; scripts only collapse day panels."""
+    latest_link = '<a class="calendar-latest" href="index.html">Latest edition <span aria-hidden="true">↗</span></a>'
+    timestamp = _timestamp(current["generated_at"])
+    if not timestamp:
+        return f'<details class="edition-calendar"><summary>Browse editions</summary><p>Date unavailable</p>{latest_link}</details>'
+    end = timestamp.astimezone(ZoneInfo("Pacific/Auckland")).date()
+    start = end - timedelta(days=6)
+    days = {start + timedelta(days=i): [] for i in range(7)}
+    seen, older = set(), []
+    for item in [current, *history]:
+        date = _timestamp(item["generated_at"])
+        if not date or not RUN_ID.fullmatch(item["run_id"]) or item["run_id"] in seen:
+            continue
+        seen.add(item["run_id"])
+        date = date.astimezone(ZoneInfo("Pacific/Auckland"))
+        if date.date() in days:
+            days[date.date()].append((date, item))
+        elif date.date() < start:
+            older.append((date, item))
+    earlier_link = ''
+    if older:
+        date, item = max(older, key=lambda pair: pair[0])
+        earlier_link = f'<a class="calendar-earlier" href="archive/{escape(item["run_id"])}.html" aria-label="Earlier editions, starting {date.day} {date:%B %Y}"><span aria-hidden="true">←</span> Earlier editions</a>'
+    cells, panels = [], []
+    for day, editions in days.items():
+        label = day.strftime("%A, %-d %B %Y")
+        face = f'<span>{day:%a}</span><strong>{day.day}</strong>'
+        if not editions:
+            cells.append(f'<button class="calendar-day is-empty" type="button" disabled aria-label="No editions for {label}">{face}<span class="calendar-marks" aria-hidden="true">&nbsp;</span></button>')
+            continue
+        panel_id = f'edition-day-{day.isoformat()}'
+        # Archive pages have a root-relative base, so a bare fragment would leave the edition.
+        day_href = f'archive/{current["run_id"]}.html#{panel_id}' if archive else f'#{panel_id}'
+        selected = ' aria-current="true"' if day == end else ''
+        count = f'{len(editions)} edition' + ('s' if len(editions) != 1 else '')
+        cells.append(f'<a class="calendar-day" href="{escape(day_href)}" aria-controls="{panel_id}" aria-label="{label}, {count}"{selected}>{face}<span class="calendar-marks" aria-hidden="true">{"·" * min(len(editions), 3)}</span></a>')
+        links = []
+        for date, item in sorted(editions, key=lambda pair: pair[0]):
+            is_current = item["run_id"] == current["run_id"]
+            href = "index.html" if is_current and not archive else f'archive/{item["run_id"]}.html'
+            marker = ' aria-current="page"' if is_current else ''
+            preview = ' <span class="calendar-preview">Review preview</span>' if item['publication_status'] != 'published' else ''
+            time = date.strftime("%-I:%M %p").lower() + date.strftime(" %Z")
+            links.append(f'<a href="{escape(href)}"{marker}>{time}{preview}</a>')
+        panels.append(f'<section class="edition-panel" id="{panel_id}" aria-label="{label}"><p>{day:%A}, {day.day} {day:%B}</p><nav aria-label="Editions for {label}">{"".join(links)}</nav></section>')
+    return f'''<details class="edition-calendar"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 2v6m10-6v6M3 11h18"/></svg>Browse editions<span class="calendar-summary-note">Past 7 days</span></summary>
+<div class="calendar-heading"><strong>{start.day} {start:%b} – {end.day} {end:%b}</strong><span>{end.year}</span></div>
+<div class="calendar-days" role="group" aria-label="Publication dates">{"".join(cells)}</div>
+<div class="calendar-panels">{"".join(panels)}</div><div class="calendar-footer">{earlier_link}{latest_link}</div></details>'''
+
+
 def render_edition(edition, archives=(), *, archive=False):
     """Render a static archive reader; anchors remain usable without JavaScript."""
     current = reader_snapshot(edition)
@@ -226,9 +278,7 @@ def render_edition(edition, archives=(), *, archive=False):
     status = "Published edition" if current["publication_status"] == "published" else "Review preview - not published"
     topic_options = ''.join(f'<option>{escape(tag)}</option>' for tag in TOPICS if any(tag in s["topics"] for s in all_stories))
     geography_options = ''.join(f'<option>{escape(tag)}</option>' for tag in sorted({tag for s in all_stories for tag in s["geography"]}))
-    edition_links = '<a href="index.html">Latest edition</a>' + ''.join(
-        f'<a href="archive/{escape(item["run_id"])}.html">{escape(_date(item["generated_at"]))} ({"Published" if item["publication_status"] == "published" else "Review preview"})</a>' for item in history
-    )
+    calendar = _edition_calendar(current, history, archive)
     featured = [s for s in stories if s["featured"]]
     remaining = [s for s in stories if not s["featured"]]
     sidebar_stories = ''
@@ -237,20 +287,24 @@ def render_edition(edition, archives=(), *, archive=False):
             sidebar_stories += f'<div class="story-group"><h2>{label}</h2>' + ''.join(_story_link(s, current["generated_at"], page_path) for s in group) + '</div>'
     if historic:
         sidebar_stories += '<div class="story-group history-group"><h2>Seven-day overview</h2>' + ''.join(_story_link(s, date, page_path, True) for s, date in historic) + '</div>'
-    refresh_date, _, refresh_time = _date(current["generated_at"]).partition(", ")
+    local_date = generated.astimezone(ZoneInfo("Pacific/Auckland")) if generated else None
+    refresh_date = local_date.strftime("%-d %B %Y") if local_date else "Date unavailable"
+    refresh_time = local_date.strftime("%-I:%M %p").lower() + local_date.strftime(" %Z") if local_date else ""
+    refresh_time_html = f'<span class="refresh-time">As of {escape(refresh_time)}</span>' if refresh_time else ''
+    briefing_label = local_date.strftime("%A") + "’s briefing" if local_date else "Your daily briefing"
     refresh_datetime = f' datetime="{escape(generated.isoformat())}"' if generated else ""
     body = f'''
 <a class="skip-link" href="{escape(page_path)}#reader-content">Skip to story</a>
 <header class="mobile-header">{LOGO}<span class="mobile-brand"><strong>Daily News</strong><time{refresh_datetime}>{escape(refresh_date)}</time></span><button id="browse-stories" type="button" aria-controls="story-browser" aria-expanded="false">Browse stories</button></header>
 <aside id="story-browser" aria-label="Story browser">
   <div class="browser-intro"><a class="reader-brand" href="index.html" aria-label="Daily News, latest edition">{LOGO}<strong>Daily News</strong></a><button id="close-browser" type="button" aria-label="Close story browser">×</button>
-  <div class="edition-refresh"><span class="eyebrow">Last refreshed</span><time class="edition-date"{refresh_datetime}><span class="refresh-date">{escape(refresh_date)}</span> <span class="refresh-time">{escape(refresh_time)}</span></time></div><span class="edition-status">{status}</span></div>
+  <div class="edition-refresh"><span class="eyebrow">{briefing_label}</span><time class="edition-date"{refresh_datetime}><span class="refresh-date">{escape(refresh_date)}</span>{refresh_time_html}</time><span class="edition-status">{status}</span>{calendar}</div></div>
   <div class="reader-controls" hidden><label class="search-label" for="story-search">Search stories</label><div class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6.5"/><path d="m15 15 6 6"/></svg><input id="story-search" type="search" placeholder="Find something to read…" autocomplete="off"></div>
     <div class="filter-row"><label>Topic<select id="topic-filter"><option value="">All topics</option>{topic_options}</select></label><label>Geography<select id="geography-filter"><option value="">All places</option>{geography_options}</select></label></div>
     <div class="filter-checks"><label><input id="unread-filter" type="checkbox"> Unread only</label><label><input id="history-filter" type="checkbox"> Include past 7 days</label></div>
   </div>
   <div class="browser-list"><div class="browser-list-heading"><strong>Browse stories</strong><span id="result-count" role="status"></span></div><nav class="story-list" aria-label="Stories">{sidebar_stories}</nav><p id="browser-empty" hidden>No stories match. Try another topic or clear the search.</p></div>
-  <details class="browser-options"><summary>Editions &amp; reading options</summary><nav class="edition-history" aria-label="Dated editions">{edition_links}</nav><p id="storage-status" role="status">Read state stays in this browser. Opening a source does not mark a story read.</p><button id="reset-read" type="button" hidden>Reset read state</button><p class="publisher-credit">AJC Analytics Limited</p></details>
+  <details class="browser-options"><summary>Reading preferences</summary><p id="storage-status" role="status">Read state stays in this browser. Opening a source does not mark a story read.</p><button id="reset-read" type="button" hidden>Reset read state</button><p class="publisher-credit">AJC Analytics Limited</p></details>
 </aside>
 <button class="browser-backdrop" id="browser-backdrop" type="button" aria-label="Close story browser" tabindex="-1" hidden></button>
 <button id="collapse-browser" type="button" aria-label="Collapse story browser" aria-controls="story-browser" aria-expanded="true" hidden><span aria-hidden="true">«</span></button>
