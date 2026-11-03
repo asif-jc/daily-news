@@ -817,5 +817,19 @@
   &quot;subtests_passed&quot;: 12
 }</pre>
   <p>Limits: this patch release does not claim a physical reboot or multi-day uptime test. The unrelated code environment was loaded through the upgraded services, not upgraded itself. Dependency and documentation review: <a href="https://github.com/asif-jc/daily-news/pull/34">PR #34</a>.</p>
+<h2>Edition dateline and calendar: 3 November 2026</h2>
+<p>The freshness card is now a ruled editorial dateline in the reader's existing ink and paper palette. The day and date identify the briefing; “As of” gives the actual snapshot time in Pacific/Auckland rather than implying a live status or a publication-completion time.</p>
+<p>A compact seven-day calendar replaces the timestamp list. Its window ends on the viewed edition's Auckland date. Available days reveal separate time links for every retained edition on that day; unavailable days are disabled. The selected page is marked, preview editions remain labelled, and a latest-edition link is always available. Reading preferences have their own disclosure.</p>
+<p>The renderer creates real links and all day panels server-side. JavaScript only switches the visible panel, so editions remain accessible without scripts. No calendar library, backend query or retention change was introduced. The current 189-story edition and six archive pages were re-rendered through the canonical publication exporter, and every article element was compared with the previous export: content and read identities were unchanged. The verified manifest covers ten files.</p>
+<pre>python -m pytest tests -q
+151 passed, 12 subtests passed in 56.59s
+
+Rendered edition: 189 stories
+Retained archive pages: 6
+Article content and read identities: unchanged
+Desktop and mobile browser scenarios: passed
+Observed viewport / document widths: 390 / 390; 320 / 320</pre>
+<p>Tests cover Auckland date grouping, multiple same-day editions, month boundaries, missing days, duplicate inputs, malformed dates, preview labels, script-free links and archive navigation. Browser scenarios exercise calendar selection and actual archive navigation alongside the existing search, filters and read-state checks. Desktop and 390px/320px mobile layouts were visually inspected. Private screenshots and test logs are retained outside the public export.</p>
+<p>Trade-off: this intentionally exposes one week ending on the viewed edition, rather than a full historical month picker. Older retained files are preserved. This release does not change retrieval, summaries or publication scheduling.</p>
  </body>
 </html>
