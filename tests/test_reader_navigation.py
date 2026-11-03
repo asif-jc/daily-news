@@ -101,7 +101,8 @@ class StoryNavigationTests(unittest.TestCase):
         calendar = page.select_one('.edition-calendar')
         self.assertIn('28 Oct', calendar.get_text())
         self.assertEqual(len(calendar.select('a[href="archive/recent.html"]')), 1)
-        self.assertIsNone(calendar.select_one('a[href="archive/stale.html"]'))
+        self.assertEqual(calendar.select_one('.calendar-earlier')['href'], 'archive/stale.html')
+        self.assertIsNone(calendar.select_one('#edition-day-2026-10-27'))
         self.assertIsNone(calendar.select_one('a[href="archive/invalid.html"]'))
         self.assertEqual(len(calendar.select('.calendar-day.is-empty')), 5)
         self.assertTrue(all(not p.has_attr('hidden') for p in calendar.select('.edition-panel')))
@@ -110,7 +111,18 @@ class StoryNavigationTests(unittest.TestCase):
         page = self.page(archive=True)
         self.assertEqual(page.select_one('.edition-panel [aria-current="page"]')['href'], 'archive/run-1.html')
         self.assertEqual(page.select_one('.calendar-latest')['href'], 'index.html')
+        self.assertEqual(page.select_one('a.calendar-day')['href'], 'archive/run-1.html#edition-day-2026-10-19')
         self.assertIn('Review preview', page.select_one('.edition-panel').get_text())
+
+    def test_earlier_link_bridges_gaps_between_retained_calendar_windows(self):
+        september = copy.deepcopy(edition())
+        september.update(run_id="september", generated_at="2026-09-20T01:00:00Z")
+        oldest = copy.deepcopy(september)
+        oldest.update(run_id="oldest", generated_at="2026-09-01T01:00:00Z")
+        page = self.page(archives=[oldest, september])
+        self.assertEqual(page.select_one('.calendar-earlier')['href'], 'archive/september.html')
+        previous = self.page(september, archives=[oldest], archive=True)
+        self.assertEqual(previous.select_one('.calendar-earlier')['href'], 'archive/oldest.html')
 
     def test_undated_edition_keeps_a_useful_archive_fallback(self):
         current = edition()

@@ -173,12 +173,12 @@ class ReaderTests(unittest.TestCase):
         self.assertEqual(page.count('class="article reader-story'), 2)
         self.assertIn("Earlier report", page)
 
-    def test_week_excludes_old_editions_from_stories_and_calendar(self):
+    def test_week_excludes_old_editions_but_keeps_date_navigation(self):
         old = copy.deepcopy(edition())
         old.update(run_id="old", generated_at="2026-09-01T01:00:00Z")
         old["stories"][0]["summary"] = "Outside the week"
         page = render_edition(edition(), [old])
-        self.assertNotIn('href="archive/old.html"', page)
+        self.assertIn('href="archive/old.html"', page)
         self.assertNotIn("Outside the week", page)
 
     def test_absent_sources_and_bad_dates_remain_readable(self):

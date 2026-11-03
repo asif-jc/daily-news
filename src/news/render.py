@@ -204,14 +204,14 @@ def _story_link(story, date, page_path, historic=False):
 
 def _edition_calendar(current, history, archive):
     """Use Auckland dates and real edition links; scripts only collapse day panels."""
-    latest_link = '<a class="calendar-latest" href="index.html">Back to the latest edition <span aria-hidden="true">↗</span></a>'
+    latest_link = '<a class="calendar-latest" href="index.html">Latest edition <span aria-hidden="true">↗</span></a>'
     timestamp = _timestamp(current["generated_at"])
     if not timestamp:
         return f'<details class="edition-calendar"><summary>Browse editions</summary><p>Date unavailable</p>{latest_link}</details>'
     end = timestamp.astimezone(ZoneInfo("Pacific/Auckland")).date()
     start = end - timedelta(days=6)
     days = {start + timedelta(days=i): [] for i in range(7)}
-    seen = set()
+    seen, older = set(), []
     for item in [current, *history]:
         date = _timestamp(item["generated_at"])
         if not date or not RUN_ID.fullmatch(item["run_id"]) or item["run_id"] in seen:
@@ -220,6 +220,12 @@ def _edition_calendar(current, history, archive):
         date = date.astimezone(ZoneInfo("Pacific/Auckland"))
         if date.date() in days:
             days[date.date()].append((date, item))
+        elif date.date() < start:
+            older.append((date, item))
+    earlier_link = ''
+    if older:
+        date, item = max(older, key=lambda pair: pair[0])
+        earlier_link = f'<a class="calendar-earlier" href="archive/{escape(item["run_id"])}.html" aria-label="Earlier editions, starting {date.day} {date:%B %Y}"><span aria-hidden="true">←</span> Earlier editions</a>'
     cells, panels = [], []
     for day, editions in days.items():
         label = day.strftime("%A, %-d %B %Y")
@@ -228,9 +234,11 @@ def _edition_calendar(current, history, archive):
             cells.append(f'<button class="calendar-day is-empty" type="button" disabled aria-label="No editions for {label}">{face}<span class="calendar-marks" aria-hidden="true">&nbsp;</span></button>')
             continue
         panel_id = f'edition-day-{day.isoformat()}'
+        # Archive pages have a root-relative base, so a bare fragment would leave the edition.
+        day_href = f'archive/{current["run_id"]}.html#{panel_id}' if archive else f'#{panel_id}'
         selected = ' aria-current="true"' if day == end else ''
         count = f'{len(editions)} edition' + ('s' if len(editions) != 1 else '')
-        cells.append(f'<a class="calendar-day" href="#{panel_id}" aria-controls="{panel_id}" aria-label="{label}, {count}"{selected}>{face}<span class="calendar-marks" aria-hidden="true">{"·" * min(len(editions), 3)}</span></a>')
+        cells.append(f'<a class="calendar-day" href="{escape(day_href)}" aria-controls="{panel_id}" aria-label="{label}, {count}"{selected}>{face}<span class="calendar-marks" aria-hidden="true">{"·" * min(len(editions), 3)}</span></a>')
         links = []
         for date, item in sorted(editions, key=lambda pair: pair[0]):
             is_current = item["run_id"] == current["run_id"]
@@ -243,7 +251,7 @@ def _edition_calendar(current, history, archive):
     return f'''<details class="edition-calendar"><summary><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 2v6m10-6v6M3 11h18"/></svg>Browse editions<span class="calendar-summary-note">Past 7 days</span></summary>
 <div class="calendar-heading"><strong>{start.day} {start:%b} – {end.day} {end:%b}</strong><span>{end.year}</span></div>
 <div class="calendar-days" role="group" aria-label="Publication dates">{"".join(cells)}</div>
-<div class="calendar-panels">{"".join(panels)}</div>{latest_link}</details>'''
+<div class="calendar-panels">{"".join(panels)}</div><div class="calendar-footer">{earlier_link}{latest_link}</div></details>'''
 
 
 def render_edition(edition, archives=(), *, archive=False):

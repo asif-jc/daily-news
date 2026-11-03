@@ -55,8 +55,10 @@ a.calendar-day[aria-current]:hover { background: #4c4c49; }
 .edition-panel nav a:hover { background: var(--lilac); }
 .edition-panel nav a[aria-current] { background: var(--lilac); box-shadow: inset 0 0 0 1px var(--ink); }
 .calendar-preview { display: block; font-size: 10px; }
-.calendar-latest { display: flex; justify-content: space-between; padding: 13px 0 10px; text-decoration: none; font-size: 11px; }
-.calendar-latest:hover { text-decoration: underline; }
+.calendar-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; }
+.calendar-footer a, .calendar-latest { display: inline-flex; gap: 7px; align-items: center; padding: 13px 0 10px; text-decoration: none; font-size: 11px; }
+.calendar-footer a:hover, .calendar-latest:hover { text-decoration: underline; }
+.calendar-footer .calendar-latest { margin-left: auto; }
 .reader-controls { flex-shrink: 0; margin: 18px 0; }
 .search-label, .filter-row label { font-size: 12px; font-weight: 600; }
 .search-label { display: block; margin-bottom: 6px; }
