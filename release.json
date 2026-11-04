@@ -1,13 +1,14 @@
 {
   "schema_version": 1,
-  "run_id": "2633a2c4-4062-4d0b-b00d-fedf164169eb",
-  "generated_at": "2026-11-03T14:00:26.870072+00:00",
-  "stories": 241,
+  "run_id": "b35f35c6-1c10-4495-a059-3cb3002a7cc2",
+  "generated_at": "2026-11-04T02:00:37.758222+00:00",
+  "stories": 274,
   "files": {
-    "index.html": "b9876fc0260012850af9aac52636be728cea29be1ee3c822eab44ba8cf278d82",
+    "index.html": "eba4c0de3bad99339eb4888fc030c594f8af18a21717d6f8c4eb08a8da951946",
     "assets/editorial-curiosity.png": "5a1ebb88c27be27c3c66466ffa63c112b137c6d31db5d45720c175df571052af",
     "assets/editorial-world.png": "0580e1a1cc809ffa982fa4d1958b61579c4e6a185e0aaf67b78e3a130ce98cd9",
     "assets/editorial-technology.png": "d1e3b9c367fa81a65be6f1854321774719cc90dfce4fe7d84b7de7d870f86880",
+    "archive/2633a2c4-4062-4d0b-b00d-fedf164169eb.html": "c774f47fa1b91cfba1a7bf1fdda07ab6d0fbec8e8c9fe6b8ab2c68c006c638b6",
     "archive/d21339b2-6808-4bd1-9e3c-5b73477626d9.html": "f2608b0d4110aece9af6e670f99fe03830f83cc4b9ae3484af0f815ba452947c",
     "archive/23e57272-d898-4d69-a322-3c49069accab.html": "04268da88ab765cfe70bcf164317ee467d0fe6ca06ed56e0a7a08ea00b3a5e14",
     "archive/a71861ea-5f67-4514-afc0-321bfd55e95a.html": "2bb2cab736cdaeef5913ed614df7db50a4720bb85035f0056849de296bb525b1",
