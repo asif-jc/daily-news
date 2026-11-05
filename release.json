@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "run_id": "a34e10da-c42e-4a43-804b-d899b818c60a",
-  "generated_at": "2026-11-04T14:00:16.198441+00:00",
-  "stories": 292,
+  "run_id": "e99b97e4-0b5f-4b58-b86d-6dea4f92b1cf",
+  "generated_at": "2026-11-05T14:00:19.849383+00:00",
+  "stories": 342,
   "files": {
-    "index.html": "abef3492d60d5996b6f97f8dd3a9dbc67b44d02869aebfc43debb0550976cd8a",
+    "index.html": "3130332c049cb63297532334a76246ad9166e359c4e569c720681037ddd243b9",
     "assets/editorial-curiosity.png": "5a1ebb88c27be27c3c66466ffa63c112b137c6d31db5d45720c175df571052af",
     "assets/editorial-world.png": "0580e1a1cc809ffa982fa4d1958b61579c4e6a185e0aaf67b78e3a130ce98cd9",
     "assets/editorial-technology.png": "d1e3b9c367fa81a65be6f1854321774719cc90dfce4fe7d84b7de7d870f86880",
