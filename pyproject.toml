@@ -13,7 +13,7 @@ dependencies = [
   "feedparser==6.0.14",
   "python-dotenv==1.2.4",
   "requests==2.34.2",
-  "psycopg[binary]==3.3.6",
+  "psycopg[binary]==3.3.8",
 ]
 
 [project.optional-dependencies]
